@@ -5,7 +5,7 @@
 
 ; zipcodes.scm contains all the US zipcodes.
 ; This file must be in the same folder as hw2.scm file.
-; You should not modify this file. Your code
+; You should not modify this file. Your code 
 ; should work for other instances of this file.
 (require "zipcodes.scm")
 
