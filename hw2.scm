@@ -87,7 +87,17 @@
 ; Returns a list identical to the first list, while having all elements
 ; that are inside nested loops taken out. So we want to flatten all elements and have
 ; them all in a single list. For example '(a (a a) a))) should become (a a a a)
-
+(define (flatten lst)
+  (cond
+    ((null? lst) lst)
+    (
+     (pair? (car lst)) (append (flatten (car lst)) (flatten (cdr lst)))
+    )
+    (
+     else (append (list (car lst)) (flatten (cdr lst)))
+    )
+   )
+)
 
 (line "flatten")
 (mydisplay (flatten '(a b c)))  ; -> (a b c)
