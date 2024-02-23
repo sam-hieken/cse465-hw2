@@ -114,7 +114,15 @@
 (define (crossproduct lst1 lst2)
   (crossproducthelper lst1 lst2 lst2)
 )
-
+(define (crossproducthelper lst1 lst2 lst2orig)
+  (cond
+    ((null? lst1) '())
+    ((null? lst2) (crossproducthelper (cdr lst1) lst2orig lst2orig))
+    (
+     else (cons (list (car lst1) (car lst2)) (crossproducthelper lst1 (cdr lst2) lst2orig))
+    )
+  )
+)
 
 (line "crossproduct")
 (mydisplay (crossproduct '(1 2) '(a b c)))
@@ -129,6 +137,12 @@
 ; from the 'zipcodes.scm' file for this. You can just call 'zipcodes' directly
 ; as shown in the sample example
 (load "zipcodes.scm")
+(define (getLatLon zipcode zips)
+  (cond
+    ((= zipcode (caar zips)) (cdddr (cdar zips)) )
+    (else (getLatLon zipcode (cdr zips)))
+  )
+)
 
 
 (line "getLatLon")
@@ -164,6 +178,13 @@
 ; Returns the number of zipcode entries for a particular state.
 ; state -- state
 ; zips -- zipcode DB
+(define (zipCount state zips)
+  (cond
+    ((null? zips) 0)
+    ((string=? state (caddar zips)) (+ 1 (zipCount state (cdr zips))))
+    (else (zipCount state (cdr zips)))
+  )
+)
 
 (line "zipCount")
 (mydisplay (zipCount "OH" zipcodes))
@@ -197,7 +218,22 @@
 ; lst -- flat list of items
 ; filters -- list of predicates to apply to the individual elements
 
+(define (filterList lst filters)
+  (filterListHelper lst filters filters)
+)
 
+(define (filterListHelper lst filters filtersOrig)
+  (cond
+    ((null? lst) (list))
+    ((null? filters) (append (list (car lst)) (filterListHelper (cdr lst) filtersOrig filtersOrig)) )
+    (else
+     (if ((car filters) (car lst))
+         (filterListHelper lst (cdr filters) filtersOrig)
+         (filterListHelper (cdr lst) filtersOrig filtersOrig)
+     )
+    )
+  )
+)
 
 (line "filterList")
 (mydisplay (filterList '(1 2 3 11 22 33 -1 -2 -3 -11 -22 -33) (list POS?)))
